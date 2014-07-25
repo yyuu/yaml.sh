@@ -60,28 +60,26 @@ func doGet(data interface{}, path []string) {
 }
 
 func prettyPrint(data interface{}) string {
-  switch data.(type) {
+  switch x := data.(type) {
     case []interface{}:
-      xs := data.([]interface{})
-      ys := make([]string, len(xs))
-      for i := range xs {
-        ys[i] = strconv.Quote(prettyPrint(xs[i]))
+      y := make([]string, len(x))
+      for i := range x {
+        y[i] = strconv.Quote(prettyPrint(x[i]))
       }
 
       // bash array style
-      return fmt.Sprintf("(%s)", strings.Join(ys, " "))
+      return fmt.Sprintf("(%s)", strings.Join(y, " "))
     case map[interface{}] interface{}:
-      xs := data.(map[interface{}] interface{})
-      ys := make([]string, len(xs))
+      y := make([]string, len(x))
       i := 0
-      for key, val := range xs {
-        ys[i] = fmt.Sprintf("%s=%s", key, strconv.Quote(prettyPrint(val)))
+      for key, val := range x {
+        y[i] = fmt.Sprintf("%s=%s", key, strconv.Quote(prettyPrint(val)))
         i++
       }
 
       // shell variable style
-      return strings.Join(ys, "\n")
+      return strings.Join(y, "\n")
     default:
-      return fmt.Sprintf("%s", data)
+      return fmt.Sprintf("%s", x)
   }
 }
